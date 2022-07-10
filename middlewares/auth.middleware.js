@@ -36,7 +36,17 @@ const protectSession = catchAsync(async (req, res, next) => {
       new AppError('the owner of this token doesnt exist anymore', 403)
     );
   }
+  req.sessionUser = user;
   next();
 });
 
-module.exports = { protectSession };
+const protectUserAccount = (req, res, next) => {
+  const { sessionUser, user } = req;
+
+  if (sessionUser.id !== user.id) {
+    return next(new AppError('you don´t own this account', 403));
+  }
+  next();
+};
+
+module.exports = { protectSession, protectUserAccount };

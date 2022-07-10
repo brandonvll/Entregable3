@@ -12,7 +12,7 @@ const {
   createUserValidators
 } = require('../middlewares/validator.middlewares');
 const { userExists } = require('../middlewares/users.middleware');
-const { protectSession } = require('../middlewares/auth.middleware');
+const { protectSession, protectUserAccount } = require('../middlewares/auth.middleware');
 
 //define enpoints async / await
 
@@ -24,8 +24,8 @@ usersRouter.post('/', createUserValidators, createUser);
 
 usersRouter.post('/login', loginUser);
 
-usersRouter.patch('/:id', protectSession, userExists, updateUser);
+usersRouter.patch('/:id', protectSession, userExists, protectUserAccount, updateUser);
 
-usersRouter.delete('/:id', protectSession, userExists, deleteUser);
+usersRouter.delete('/:id', protectSession, userExists, protectUserAccount, deleteUser);
 
 module.exports = { usersRouter };
